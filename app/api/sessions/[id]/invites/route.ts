@@ -7,12 +7,12 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = (await request.json()) as AddInviteRequest;
     const { name, slack_user_id, role_type } = body;
-    const sessionId = params.id;
+    const { id: sessionId } = await params;
 
     const session = getSession(sessionId);
     if (!session) {

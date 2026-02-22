@@ -41,9 +41,10 @@ function getQuestionsForRole(roleType: string) {
 
 export async function GET(
   _request: Request,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
-  const decoded = validateToken(params.token);
+  const { token } = await params;
+  const decoded = validateToken(token);
   if (!decoded) {
     return NextResponse.json({ success: false, error: "Invalid or expired link" }, { status: 401 });
   }
@@ -79,10 +80,11 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
   try {
-    const decoded = validateToken(params.token);
+    const { token } = await params;
+  const decoded = validateToken(token);
     if (!decoded) {
       return NextResponse.json({ success: false, error: "Invalid or expired link" }, { status: 401 });
     }

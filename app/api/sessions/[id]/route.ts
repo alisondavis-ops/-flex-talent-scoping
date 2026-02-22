@@ -3,9 +3,10 @@ import { getSession } from "@/lib/sessions";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = getSession(params.id);
+  const { id } = await params;
+  const session = getSession(id);
   if (!session) {
     return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
   }
