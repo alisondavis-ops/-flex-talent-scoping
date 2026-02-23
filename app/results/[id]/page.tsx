@@ -423,10 +423,6 @@ export default function ResultsPage() {
                 </div>
               ))}
             </div>
-            <div style={styles.card}>
-              <div style={{ ...styles.label, marginBottom: 8 }}>Diversity Considerations</div>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: "#CACACA" }}>{a.sourcing_strategy.diversity_considerations}</p>
-            </div>
           </div>
         )}
 

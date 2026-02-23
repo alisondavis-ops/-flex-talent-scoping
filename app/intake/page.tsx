@@ -31,6 +31,13 @@ interface Question {
   options?: string[];
 }
 
+const Q_ROLE_SETUP: Question[] = [
+  { id: "role_title", label: "What is the working title for this role?", probe: "e.g. Senior Product Manager, Staff Engineer, L6 Talent Partner — use the title you'd post externally.", type: "text" },
+  { id: "hiring_id", label: "What is the Hiring ID for this role?", probe: "This is the ID from your approved Jira headcount request. e.g. HC-2024-042", type: "text" },
+  { id: "reports_to", label: "Who does this role report to?", probe: "First and last name of the direct manager.", type: "text" },
+  { id: "day_to_day", label: "Describe what this person does day to day in your own words.", probe: "2-3 sentences. Ignore titles and levels for now — just describe the actual work. What does a Tuesday look like for them?", type: "textarea" },
+];
+
 const Q_CORE_PRE: (Question & { tracks: string[] })[] = [
   { id: "org_area_product", label: "Which part of the product org is this role part of?", probe: "e.g. Consumer, Platform, Partner — where does this team sit?", type: "text", tracks: ["product"] },
   { id: "org_area_ga", label: "Which part of the org does this role support?", probe: "e.g. Engineering, GTM, People — who are the primary internal stakeholders?", type: "text", tracks: ["ga", "engineering", "revenue", "marketing"] },
@@ -84,7 +91,7 @@ const TRACK_QUESTIONS: Record<string, Question[]> = {
 function buildQuestions(track: string): Question[] {
   const trackQs = TRACK_QUESTIONS[track] ?? TRACK_QUESTIONS.ga;
   const orgQ = Q_CORE_PRE.find(q => q.tracks.includes(track));
-  return [...(orgQ ? [orgQ] : []), ...trackQs, ...Q_CORE_POST];
+  return [...Q_ROLE_SETUP, ...(orgQ ? [orgQ] : []), ...trackQs, ...Q_CORE_POST];
 }
 
 export default function IntakePage() {

@@ -73,6 +73,8 @@ export async function GET(
       role_type: decoded.roleType,
       stakeholder_name: invite.name,
       job_family: session.job_family,
+      role_title: session.hm_answers.role_title ?? session.job_family,
+      requester_name: session.tap_name ?? null,
       questions,
     },
   });

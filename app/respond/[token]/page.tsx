@@ -11,14 +11,7 @@ interface Question {
   options?: string[];
 }
 
-interface FormData {
-  invite_id: string;
-  session_id: string;
-  role_type: string;
-  stakeholder_name: string;
-  job_family: string;
-  questions: Question[];
-}
+
 
 const styles = {
   page: { minHeight: "100vh", background: "#1D1D1D", color: "#F7F7F7", fontFamily: "'DM Sans', system-ui, sans-serif" },
@@ -160,8 +153,19 @@ export default function RespondPage() {
           <span style={{ fontSize: 12, color: "#555" }}>{idx + 1} / {formData.questions.length}</span>
         </div>
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 13, color: "#787878", marginBottom: 4 }}>Hi {formData.stakeholder_name} — sharing your perspective on</div>
-          <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(106,61,184,0.1)", border: "1px solid rgba(106,61,184,0.3)", color: "#8B5DD4" }}>{formData.job_family}</span>
+          <div style={{ fontSize: 13, color: "#CACACA", marginBottom: 12, lineHeight: 1.6 }}>
+            Hi <strong style={{ color: "#F7F7F7" }}>{formData.stakeholder_name}</strong> — you've been asked to share your perspective on a role we're scoping.
+          </div>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#242424", border: "1px solid #3A3A3A", marginBottom: 8 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#787878", marginBottom: 6 }}>Role</div>
+            <div style={{ fontSize: 15, fontWeight: 600, color: "#F7F7F7" }}>{formData.role_title ?? formData.job_family}</div>
+            {formData.requester_name && (
+              <div style={{ fontSize: 13, color: "#787878", marginTop: 4 }}>{formData.requester_name} is requesting your input</div>
+            )}
+          </div>
+          <div style={{ fontSize: 12, color: "#555", lineHeight: 1.5 }}>
+            Your responses are independent and confidential — only the Talent team will see individual answers. This takes about 8 minutes.
+          </div>
         </div>
 
         <div key={idx}>
