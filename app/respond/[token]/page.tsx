@@ -60,6 +60,37 @@ export default function RespondPage() {
     setAnswers(next);
     setVal("");
 
+    // If they just answered the relationship question, inject follow-up questions
+    if (q.id === "relationship") {
+      const followups = Object.entries({
+        "Cross-functional partner — I work closely with this team but sit in a different function": [
+          { id: "collaboration_expectations", label: "How will this person need to work with your team day-to-day?", probe: "Think about handoffs, shared projects, or dependencies.", type: "textarea" },
+          { id: "gap_you_see", label: "What gap do you most hope this hire fills from your vantage point?", probe: "Is there a skill, approach, or perspective missing that affects your team too?", type: "textarea" },
+        ],
+        "Key stakeholder — this role will directly impact my work or team": [
+          { id: "impact_on_you", label: "How will this hire directly impact your work or team?", probe: "Think about what changes, improves, or becomes possible once this person is in seat.", type: "textarea" },
+          { id: "what_you_need", label: "What do you most need from this person to do your job well?", probe: "Be direct — this is about setting the hire up for success.", type: "textarea" },
+        ],
+        "Department lead — I lead the department or org this role sits within": [
+          { id: "strategic_context", label: "How does this hire fit into the broader org strategy?", probe: "What's the business problem this role is solving over the next 12–18 months?", type: "textarea" },
+          { id: "budget_context", label: "Is there any headcount or budget context we should know?", probe: "Any constraints on comp level, timeline, or headcount classification?", type: "textarea" },
+        ],
+        "DRI — I am directly responsible for the project or outcome this role supports": [
+          { id: "non_negotiables", label: "What are your absolute non-negotiables for this hire?", probe: "If a candidate is missing this, it's an automatic no — regardless of everything else.", type: "textarea" },
+          { id: "tradeoffs", label: "What tradeoffs are you willing to make?", probe: "e.g. less experience for higher potential, domain expertise over Flex attributes, etc.", type: "textarea" },
+        ],
+      }).find(([key]) => key === v);
+
+      if (followups) {
+        const newQuestions = [
+          ...formData.questions.slice(0, idx + 1),
+          ...followups[1],
+          ...formData.questions.slice(idx + 1),
+        ];
+        setFormData({ ...formData, questions: newQuestions });
+      }
+    }
+
     if (idx < formData.questions.length - 1) {
       setIdx(idx + 1);
     } else {

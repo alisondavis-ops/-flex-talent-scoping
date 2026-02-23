@@ -5,38 +5,50 @@ import type { SubmitResponseRequest } from "@/types";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
-const STAKEHOLDER_QUESTIONS: Record<string, { id: string; label: string; probe?: string; type: string; options?: string[] }[]> = {
-  all: [
-    { id: "level_expectation", label: "What level do you expect this person to be hired at?", type: "select", options: ["L3","L4","L5","L6","L7","L8","L9"] },
-    { id: "level_rationale", label: "Walk us through your reasoning. Why that level?", probe: "What about scope, impact, or the team's needs led you there?", type: "textarea" },
-    { id: "success_definition", label: "What does success look like from your vantage point at 6 months?", probe: "Be specific — what will you see them doing, influencing, or delivering?", type: "textarea" },
+const RELATIONSHIP_QUESTION = {
+  id: "relationship",
+  label: "What is your relationship to this role?",
+  probe: "This helps us understand your perspective and ask the most relevant follow-up questions.",
+  type: "select",
+  options: [
+    "Cross-functional partner — I work closely with this team but sit in a different function",
+    "Key stakeholder — this role will directly impact my work or team",
+    "Department lead — I lead the department or org this role sits within",
+    "DRI — I am directly responsible for the project or outcome this role supports",
   ],
-  hm_lead: [
-    { id: "strategic_context", label: "How does this hire fit into the broader org strategy?", probe: "What's the business problem this role is solving over the next 12–18 months?", type: "textarea" },
-    { id: "budget_context", label: "Is there any budget or headcount context we should know?", probe: "Is this approved headcount? Any constraints on comp level or timeline?", type: "textarea" },
-  ],
-  hm_peer: [
+};
+
+const CORE_QUESTIONS = [
+  { id: "level_expectation", label: "What level do you expect this person to be hired at?", type: "select", options: ["L3","L4","L5","L6","L7","L8","L9"] },
+  { id: "level_rationale", label: "Walk us through your reasoning. Why that level?", probe: "What about scope, impact, or the team's needs led you there?", type: "textarea" },
+  { id: "success_definition", label: "What does success look like from your vantage point at 6 months?", probe: "Be specific — what will you see them doing, influencing, or delivering?", type: "textarea" },
+];
+
+const RELATIONSHIP_FOLLOWUPS: Record<string, { id: string; label: string; probe?: string; type: string }[]> = {
+  "Cross-functional partner — I work closely with this team but sit in a different function": [
     { id: "collaboration_expectations", label: "How will this person need to work with your team day-to-day?", probe: "Think about handoffs, shared projects, or dependencies.", type: "textarea" },
-    { id: "gap_you_see", label: "What gap in the current team do you most hope this hire fills?", probe: "Is there a skill, approach, or perspective missing from the team today?", type: "textarea" },
+    { id: "gap_you_see", label: "What gap do you most hope this hire fills from your vantage point?", probe: "Is there a skill, approach, or perspective missing that affects your team too?", type: "textarea" },
   ],
-  future_peer: [
-    { id: "team_dynamics", label: "What does this person need to be like to thrive on this team?", probe: "Think about working style, communication, speed, and how the team makes decisions.", type: "textarea" },
-    { id: "biggest_challenge", label: "What's the hardest part of working here that a new person needs to be ready for?", probe: "Be candid — this helps us set candidates up for success.", type: "textarea" },
+  "Key stakeholder — this role will directly impact my work or team": [
+    { id: "impact_on_you", label: "How will this hire directly impact your work or team?", probe: "Think about what changes, improves, or becomes possible once this person is in seat.", type: "textarea" },
+    { id: "what_you_need", label: "What do you most need from this person to do your job well?", probe: "Be direct — this is about setting the hire up for success.", type: "textarea" },
   ],
-  ic_team: [
-    { id: "what_you_need_in_a_manager", label: "What does a great manager look like for you and this team?", probe: "Think about how they make decisions, how they unblock, and how they develop people.", type: "textarea" },
-    { id: "ic_concern", label: "Is there anything you think we should know that a hiring manager might not surface?", probe: "This is confidential — only the Talent team will see your answer.", type: "textarea" },
+  "Department lead — I lead the department or org this role sits within": [
+    { id: "strategic_context", label: "How does this hire fit into the broader org strategy?", probe: "What's the business problem this role is solving over the next 12–18 months?", type: "textarea" },
+    { id: "budget_context", label: "Is there any headcount or budget context we should know?", probe: "Any constraints on comp level, timeline, or headcount classification?", type: "textarea" },
   ],
-  backfill_colleague: [
-    { id: "what_worked", label: "Looking back at the person in this role, what did they do exceptionally well?", probe: "What should we make sure the next person can do equally well or better?", type: "textarea" },
-    { id: "what_was_missing", label: "Where did you see gaps or opportunities to do things differently?", probe: "No need to be diplomatic — this is about improving the role.", type: "textarea" },
+  "DRI — I am directly responsible for the project or outcome this role supports": [
+    { id: "non_negotiables", label: "What are your absolute non-negotiables for this hire?", probe: "If a candidate is missing this, it's an automatic no — regardless of everything else.", type: "textarea" },
+    { id: "tradeoffs", label: "What tradeoffs are you willing to make?", probe: "e.g. less experience for higher potential, domain expertise over Flex attributes, etc.", type: "textarea" },
   ],
 };
 
 function getQuestionsForRole(roleType: string) {
-  const shared = STAKEHOLDER_QUESTIONS.all;
-  const roleSpecific = STAKEHOLDER_QUESTIONS[roleType] ?? [];
-  return [...shared, ...roleSpecific];
+  return [RELATIONSHIP_QUESTION, ...CORE_QUESTIONS];
+}
+
+function getFollowupQuestions(relationshipAnswer: string) {
+  return RELATIONSHIP_FOLLOWUPS[relationshipAnswer] ?? [];
 }
 
 export async function GET(

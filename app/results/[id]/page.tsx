@@ -5,11 +5,10 @@ import { useParams } from "next/navigation";
 import type { IntakeSession, StakeholderRole } from "@/types";
 
 const ROLE_LABELS: Record<StakeholderRole, string> = {
-  hm_peer: "HM Peer",
-  hm_lead: "HM's Lead",
-  future_peer: "Future Peer",
-  ic_team: "IC on Team",
-  backfill_colleague: "Backfill Colleague",
+  cross_functional_partner: "Cross-Functional Partner",
+  key_stakeholder: "Key Stakeholder",
+  department_lead: "Department Lead",
+  dri: "DRI",
 };
 
 const SEVERITY_COLORS = { high: "#D0463A", medium: "#C17F24", low: "#4A8C5C" };
