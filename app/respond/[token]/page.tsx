@@ -11,6 +11,17 @@ interface Question {
   options?: string[];
 }
 
+interface StakeholderFormData {
+  invite_id: string;
+  session_id: string;
+  role_type: string;
+  stakeholder_name: string;
+  job_family: string;
+  role_title?: string;
+  requester_name?: string;
+  questions: Question[];
+}
+
 
 
 const styles = {
@@ -28,7 +39,7 @@ const styles = {
 
 export default function RespondPage() {
   const { token } = useParams<{ token: string }>();
-  const [formData, setFormData] = useState<FormData | null>(null);
+  const [formData, setFormData] = useState<StakeholderFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [idx, setIdx] = useState(0);
