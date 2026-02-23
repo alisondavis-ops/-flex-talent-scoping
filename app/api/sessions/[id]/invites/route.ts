@@ -10,9 +10,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: sessionId } = await params;
     const body = (await request.json()) as AddInviteRequest;
     const { name, slack_user_id, role_type } = body;
-    const { id: sessionId } = await params;
 
     const session = getSession(sessionId);
     if (!session) {

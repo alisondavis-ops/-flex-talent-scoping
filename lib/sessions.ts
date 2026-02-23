@@ -1,12 +1,44 @@
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
 import type { IntakeSession, StakeholderInvite, StakeholderResponse, StakeholderRole } from "@/types";
 
-const sessionCache = new Map<string, IntakeSession>();
 const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret-change-in-production";
 const TOKEN_EXPIRY_DAYS = 14;
+const DATA_FILE = path.join(process.cwd(), ".sessions.json");
 
-export function createSession(partial: Omit<IntakeSession, "id" | "created_at" | "updated_at" | "phase" | "invites" | "responses" | "synthesis">): IntakeSession {
+// ── Persistence ──────────────────────────────────────────────────────────────
+
+function loadSessions(): Map<string, IntakeSession> {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const raw = fs.readFileSync(DATA_FILE, "utf-8");
+      const obj = JSON.parse(raw) as Record<string, IntakeSession>;
+      return new Map(Object.entries(obj));
+    }
+  } catch (err) {
+    console.error("Failed to load sessions from disk:", err);
+  }
+  return new Map();
+}
+
+function saveSessions(cache: Map<string, IntakeSession>): void {
+  try {
+    const obj = Object.fromEntries(cache.entries());
+    fs.writeFileSync(DATA_FILE, JSON.stringify(obj, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Failed to save sessions to disk:", err);
+  }
+}
+
+const sessionCache = loadSessions();
+
+// ── Session CRUD ─────────────────────────────────────────────────────────────
+
+export function createSession(
+  partial: Omit<IntakeSession, "id" | "created_at" | "updated_at" | "phase" | "invites" | "responses" | "synthesis">
+): IntakeSession {
   const session: IntakeSession = {
     ...partial,
     id: uuidv4(),
@@ -18,6 +50,7 @@ export function createSession(partial: Omit<IntakeSession, "id" | "created_at" |
     synthesis: null,
   };
   sessionCache.set(session.id, session);
+  saveSessions(sessionCache);
   return session;
 }
 
@@ -30,6 +63,7 @@ export function updateSession(id: string, updates: Partial<IntakeSession>): Inta
   if (!session) return null;
   const updated = { ...session, ...updates, updated_at: new Date().toISOString() };
   sessionCache.set(id, updated);
+  saveSessions(sessionCache);
   return updated;
 }
 
@@ -38,6 +72,8 @@ export function getAllSessions(): IntakeSession[] {
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 }
+
+// ── Invites ───────────────────────────────────────────────────────────────────
 
 export function createInvite(params: {
   sessionId: string;
@@ -77,7 +113,11 @@ export function createInvite(params: {
   return invite;
 }
 
-export function validateToken(token: string): { inviteId: string; sessionId: string; roleType: StakeholderRole } | null {
+export function validateToken(token: string): {
+  inviteId: string;
+  sessionId: string;
+  roleType: StakeholderRole;
+} | null {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as {
       invite_id: string;

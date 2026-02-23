@@ -76,8 +76,15 @@ export default function ResultsPage() {
       const data = await res.json();
       if (data.success) {
         const refreshed = await fetch(`/api/sessions/${id}`).then(r => r.json());
-        if (refreshed.success) setSession(refreshed.data);
+        if (refreshed.success) {
+          setSession(refreshed.data);
+          setTab(0);
+        }
+      } else {
+        console.error("Synthesis failed:", data.error);
       }
+    } catch (err) {
+      console.error("Synthesis error:", err);
     } finally {
       setSynthLoading(false);
     }

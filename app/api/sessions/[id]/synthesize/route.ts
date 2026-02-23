@@ -9,7 +9,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = getSession(params.id);
+    const { id } = await params;
+    const session = getSession(id);
     if (!session) {
       return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
     }
@@ -34,7 +35,7 @@ export async function POST(
       session.ai_analysis
     );
 
-    updateSession(params.id, {
+    updateSession(id, {
       synthesis,
       phase: "synthesis_complete",
     });
@@ -48,7 +49,7 @@ export async function POST(
 
       const channel = await createSearchChannel({
         jobFamily: session.job_family,
-        sessionId: params.id,
+        sessionId: id,
         tapSlackId: session.tap_slack_id ?? "",
         stakeholderSlackIds,
         synthesisSummary: synthesis.slack_summary,
@@ -56,7 +57,7 @@ export async function POST(
       slackChannelId = channel.channelId;
       slackChannelName = channel.channelName;
 
-      updateSession(params.id, {
+      updateSession(id, {
         slack_channel_id: slackChannelId,
         slack_channel_name: slackChannelName,
       });
