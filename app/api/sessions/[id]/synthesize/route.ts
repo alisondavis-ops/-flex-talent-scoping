@@ -29,9 +29,18 @@ export async function POST(
       );
     }
 
+    // In the new TAP-led flow, HM answers come in as a hiring_manager response
+    const hmResponse = session.responses.find(r => r.role_type === "hiring_manager");
+    const hmAnswers = hmResponse
+      ? { ...session.hm_answers, ...hmResponse.answers }
+      : session.hm_answers;
+
+    // Non-HM stakeholder responses
+    const stakeholderResponses = session.responses.filter(r => r.role_type !== "hiring_manager");
+
     const synthesis = await synthesizeStakeholders(
-      session.hm_answers,
-      session.responses,
+      hmAnswers,
+      stakeholderResponses,
       session.ai_analysis
     );
 
