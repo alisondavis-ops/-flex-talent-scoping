@@ -101,7 +101,7 @@ Candidates who spike on Intellect and Flex Attributes will outperform "experienc
 1. **Preliminary Screen** (TAP-led, ~30 min): Assess background, motivation, logistics — compensation expectations, location, work authorization. Logged in Greenhouse.
 2. **Hiring Manager Interview**: Assesses role-specific skills and team fit.
 3. **Team Interviews** (typically 3–4 with key stakeholders): Evaluate skills, experience, and Flex Attributes.
-4. **Case Study** (REQUIRED for L7+ roles only): Practical exercise involving the HM and leadership (Christina added by default; Shragie if direct report).
+4. **Case Study** (REQUIRED for L7+ roles only): Practical exercise involving the HM and additional panelists as determined by the hiring team.
 5. **References & Backchannels** (senior roles, typically L7+): Validate experience and working style.
 
 **Additional notes:**
