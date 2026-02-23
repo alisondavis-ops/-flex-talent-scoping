@@ -503,10 +503,10 @@ export default function ResultsPage() {
               </div>
             )}
 
-            {session.synthesis?.slack_channel_name && (
+            {session.slack_channel_name && (
               <div style={{ ...styles.card, borderColor: "#4A8C5C44", background: "rgba(74,140,92,0.08)" }}>
                 <div style={{ fontSize: 14, color: "#4A8C5C", fontWeight: 600 }}>
-                  ✓ Slack channel created: #{session.synthesis.slack_channel_name}
+                  ✓ Slack channel created: #{session.slack_channel_name}
                 </div>
               </div>
             )}
