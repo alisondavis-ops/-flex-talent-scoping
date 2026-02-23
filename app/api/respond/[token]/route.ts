@@ -43,12 +43,24 @@ const RELATIONSHIP_FOLLOWUPS: Record<string, { id: string; label: string; probe?
   ],
 };
 
-function getQuestionsForRole(roleType: string) {
-  return [RELATIONSHIP_QUESTION, ...CORE_QUESTIONS];
-}
+const HM_QUESTIONS = [
+  { id: "org_area", label: "Which part of the org does this role sit in?", probe: "e.g. Consumer, Platform, Partner — where does this team live?", type: "text" },
+  { id: "people_management", label: "Does this person need to manage people?", probe: "If yes — how many reports, how senior, and how much management experience is truly needed?", type: "text" },
+  { id: "ic_vs_manager", label: "Is this role hands-on IC, purely managerial, or a player/coach?", type: "select", options: ["Primarily IC — mostly in the weeds", "Player/coach — significant IC + managing others", "Primarily managerial — IC in critical spots only", "Full people leader — IC is rare"] },
+  { id: "zero_to_one", label: "Is this a 0-to-1 build or evolving something that exists?", type: "select", options: ["Yes — fully net new", "Mostly new, some foundation exists", "Scaling/evolving an existing product or function", "Primarily maintenance and optimization"] },
+  { id: "success", label: "What does success look like at 6 and 12 months?", probe: "Be specific. What will this person have shipped, influenced, or changed?", type: "textarea" },
+  { id: "failure", label: "What does failure look like?", probe: "What would cause this hire not to work out? This often reveals the real requirements.", type: "textarea" },
+  { id: "backfill", label: "Is this a backfill or a new role?", probe: "If backfill — what did you learn? If new — who owned this scope before?", type: "text" },
+  { id: "domain_experience", label: "How much domain or industry experience is needed?", type: "select", options: ["Not required — strong fundamentals are enough", "Helpful but not a dealbreaker", "Strongly preferred", "Required — complexity demands it"] },
+  { id: "competitors", label: "Any specific companies, backgrounds, or profiles we should target?", type: "text" },
+  { id: "location", label: "Where can this role be based?", type: "select", options: ["New York, NY — Tier 1 (HQ)", "San Francisco / Bay Area — Tier 1", "Salt Lake City, UT — Tier 3", "Remote — Engineering / Data Science / AI/ML / L4+ Field Sales", "Remote — Exception requested (L7+ only)", "Multiple locations"] },
+  { id: "hm_level_pick", label: "What level do you believe this role should be?", probe: "Pick the level you feel most convicted about.", type: "select", options: ["L3", "L4", "L5", "L6", "L7", "L8", "L9"] },
+  { id: "hm_level_rationale", label: "Walk us through your reasoning. Why that level?", probe: "What about scope, impact, or skills needed led you there?", type: "textarea" },
+];
 
-function getFollowupQuestions(relationshipAnswer: string) {
-  return RELATIONSHIP_FOLLOWUPS[relationshipAnswer] ?? [];
+function getQuestionsForRole(roleType: string) {
+  if (roleType === "hiring_manager") return HM_QUESTIONS;
+  return [RELATIONSHIP_QUESTION, ...CORE_QUESTIONS];
 }
 
 export async function GET(

@@ -2,7 +2,7 @@
 
 export type Track = "product" | "engineering" | "marketing" | "revenue" | "ga";
 export type Level = 4 | 5 | 6 | 7 | 8 | 9;
-export type StakeholderRole = "cross_functional_partner" | "key_stakeholder" | "department_lead" | "dri";
+export type StakeholderRole = "hiring_manager" | "cross_functional_partner" | "key_stakeholder" | "department_lead" | "dri";
 export type SessionPhase = "intake_complete" | "stakeholders_invited" | "synthesis_complete" | "closed";
 export type TensionSeverity = "high" | "medium" | "low";
 export type InviteStatus = "pending" | "sent" | "submitted" | "expired";

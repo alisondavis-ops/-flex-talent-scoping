@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import type { IntakeSession, StakeholderRole } from "@/types";
 
 const ROLE_LABELS: Record<StakeholderRole, string> = {
+  hiring_manager: "Hiring Manager",
   cross_functional_partner: "Cross-Functional Partner",
   key_stakeholder: "Key Stakeholder",
   department_lead: "Department Lead",

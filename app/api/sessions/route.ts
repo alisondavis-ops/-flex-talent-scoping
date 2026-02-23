@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import type { CreateSessionRequest } from "@/types";
-import { analyzeIntake } from "@/lib/claude";
 import { createSession } from "@/lib/sessions";
-import { createNotionPage } from "@/lib/notion";
 
 const TRACK_MAP: Record<string, string[]> = {
   product:     ["Core Product", "Design"],
@@ -37,18 +35,10 @@ export async function POST(request: Request) {
       ai_analysis: null,
     });
 
-    let ai_analysis = null;
-    try {
-      ai_analysis = await analyzeIntake(hm_answers, track, job_family);
-      session.ai_analysis = ai_analysis;
-    } catch (err) {
-      console.error("Claude analysis failed:", err);
-    }
-
     let notionPageId: string | undefined;
     try {
-      const sessionWithAnalysis = { ...session, ai_analysis };
-      notionPageId = await createNotionPage(sessionWithAnalysis);
+      const { createNotionPage } = await import("@/lib/notion");
+      notionPageId = await createNotionPage(session);
       session.notion_page_id = notionPageId;
     } catch (err) {
       console.error("Notion write failed:", err);
@@ -58,7 +48,6 @@ export async function POST(request: Request) {
       success: true,
       data: {
         session_id: session.id,
-        analysis: ai_analysis,
         notion_page_id: notionPageId,
       },
     });

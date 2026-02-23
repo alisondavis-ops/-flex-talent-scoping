@@ -88,10 +88,12 @@ const TRACK_QUESTIONS: Record<string, Question[]> = {
   ],
 };
 
-function buildQuestions(track: string): Question[] {
-  const trackQs = TRACK_QUESTIONS[track] ?? TRACK_QUESTIONS.ga;
-  const orgQ = Q_CORE_PRE.find(q => q.tracks.includes(track));
-  return [...Q_ROLE_SETUP, ...(orgQ ? [orgQ] : []), ...trackQs, ...Q_CORE_POST];
+function buildQuestions(_track: string): Question[] {
+  return [
+    ...Q_ROLE_SETUP,
+    { id: "tap_name", label: "What's your name?", probe: "So stakeholders know who's reaching out.", type: "text" },
+    { id: "search_context", label: "Any context on this search we should know going in?", probe: "Timeline pressure, internal candidates, org sensitivity, team dynamics — anything a TAP should know before the kickoff call.", type: "textarea" },
+  ];
 }
 
 export default function IntakePage() {
@@ -136,7 +138,7 @@ export default function IntakePage() {
         const res = await fetch("/api/sessions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ hm_answers: next, job_family: jobFamily, track }),
+          body: JSON.stringify({ hm_answers: next, job_family: jobFamily, track, tap_name: next.tap_name }),
         });
         const data = await res.json();
         if (data.success) {
@@ -216,7 +218,7 @@ export default function IntakePage() {
         <div style={{ width: 32, height: 32, border: "2px solid #3A3A3A", borderTopColor: "#6A3DB8", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>Analyzing with Claude...</div>
-          <div style={{ fontSize: 14, color: "#787878" }}>Running level analysis, surfacing tensions, drafting JD. ~20 seconds.</div>
+          <div style={{ fontSize: 14, color: "#787878" }}>Setting up your search. Just a moment.</div>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
