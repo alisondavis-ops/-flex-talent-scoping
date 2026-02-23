@@ -34,7 +34,7 @@ export default function ResultsPage() {
   const [session, setSession] = useState<IntakeSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState(0);
-  const [inviteForm, setInviteForm] = useState({ name: "", slack_user_id: "", role_type: "hm_peer" as StakeholderRole });
+  const [inviteForm, setInviteForm] = useState({ name: "", slack_user_id: "", role_type: "cross_functional_partner" as StakeholderRole });
   const [inviteLoading, setInviteLoading] = useState(false);
   const [inviteLinks, setInviteLinks] = useState<Record<string, string>>({});
   const [synthLoading, setSynthLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function ResultsPage() {
         setInviteLinks(prev => ({ ...prev, [data.data.invite_id]: data.data.form_link }));
         const refreshed = await fetch(`/api/sessions/${id}`).then(r => r.json());
         if (refreshed.success) setSession(refreshed.data);
-        setInviteForm({ name: "", slack_user_id: "", role_type: "hm_peer" });
+        setInviteForm({ name: "", slack_user_id: "", role_type: "cross_functional_partner" });
       }
     } finally {
       setInviteLoading(false);
