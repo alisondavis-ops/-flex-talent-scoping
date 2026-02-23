@@ -87,6 +87,6 @@ export async function updateNotionPage(
   }
 
   if (Object.keys(properties).length > 0) {
-    await notion.pages.update({ page_id: pageId, properties });
+    await notion.pages.update({ page_id: pageId, properties: properties as Parameters<typeof notion.pages.update>[0]["properties"] });
   }
 }
