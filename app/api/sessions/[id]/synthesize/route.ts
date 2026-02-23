@@ -15,12 +15,7 @@ export async function POST(
       return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
     }
 
-    if (!session.ai_analysis) {
-      return NextResponse.json(
-        { success: false, error: "Initial analysis must complete before synthesis" },
-        { status: 400 }
-      );
-    }
+    // ai_analysis may be null in the new TAP-led flow — that's fine, synthesis handles it
 
     if (session.responses.length === 0) {
       return NextResponse.json(
