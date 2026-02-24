@@ -324,7 +324,7 @@ CRITICAL: Never include ic_concern content in the slack_summary. The ic_concern 
   "jd_draft": {
     "job_title": "${hmAnswers.role_title ?? "Role Title"}",
     "level_label": "<e.g. L5 — Senior Talent Partner>",
-    "about_the_role": "<2-3 paragraphs. Written for an external candidate. Compelling, specific, rooted in the actual scope described by HM and stakeholders.>",
+    "about_the_role": "<2-3 paragraphs. Written for an external candidate. The first sentence should incorporate the HM's exact day-to-day description verbatim: '${hmAnswers.day_to_day ?? ""}'. Build the rest of the paragraph around the full scope of the role.>",
     "what_you_will_do": ["<6-8 specific responsibilities. Not generic. Pulled directly from HM and stakeholder answers.>"],
     "what_we_are_looking_for": ["<6-8 requirements. Mix of Flex attributes and role-specific skills. Do NOT include parenthetical citations like '(Owner attribute)' or '(L5 signal)' — weave the language in naturally instead.>"],
     "nice_to_have": ["<3-4 items>"],

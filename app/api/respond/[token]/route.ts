@@ -95,6 +95,7 @@ function getHMQuestions(track: string) {
   };
 
   const coreHMQuestions = [
+  { id: "day_to_day", label: "Describe what this person does day to day in your own words.", probe: "2-3 sentences. Ignore titles and levels for now — just describe the actual work. What does a Tuesday look like for them?", type: "textarea" },
     { id: "people_management", label: "Does this person need to manage people?", probe: "If yes — how many reports, how senior, and how much management experience is truly needed?", type: "text" },
     { id: "ic_vs_manager", label: "Is this role hands-on IC, purely managerial, or a player/coach?", type: "select", options: ["Primarily IC — mostly in the weeds", "Player/coach — significant IC + managing others", "Primarily managerial — IC in critical spots only", "Full people leader — IC is rare"] },
     { id: "success", label: "What does success look like at 6 and 12 months?", probe: "Be specific. What will this person have shipped, influenced, or changed?", type: "textarea" },

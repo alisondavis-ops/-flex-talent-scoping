@@ -35,7 +35,6 @@ const Q_ROLE_SETUP: Question[] = [
   { id: "role_title", label: "What is the working title for this role?", probe: "e.g. Senior Product Manager, Staff Engineer, L6 Talent Partner — use the title you'd post externally.", type: "text" },
   { id: "hiring_id", label: "What is the Hiring ID for this role?", probe: "This is the ID from your approved Jira headcount request. e.g. HC-2024-042", type: "text" },
   { id: "reports_to", label: "Who does this role report to?", probe: "First and last name of the direct manager.", type: "text" },
-  { id: "day_to_day", label: "Describe what this person does day to day in your own words.", probe: "2-3 sentences. Ignore titles and levels for now — just describe the actual work. What does a Tuesday look like for them?", type: "textarea" },
 ];
 
 const Q_CORE_PRE: (Question & { tracks: string[] })[] = [
@@ -171,17 +170,17 @@ export default function IntakePage() {
   const q = questions[idx];
 
   const styles = {
-    page: { minHeight: "100vh", background: "#0D0B14", color: "#ECEAF2", fontFamily: "'DM Sans', system-ui, sans-serif", overflowY: "auto" as const },
+    page: { minHeight: "100vh", background: "#1D1D1D", color: "#F7F7F7", fontFamily: "'DM Sans', system-ui, sans-serif", overflowY: "auto" as const },
     container: { maxWidth: 640, margin: "0 auto", padding: "40px 24px", display: "flex", flexDirection: "column" as const },
-    label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#B28CF4", marginBottom: 16 },
+    label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#8B5DD4", marginBottom: 16 },
     heading: { fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 28, color: "#F7F7F7", marginBottom: 12, lineHeight: 1.25 },
-    probe: { fontSize: 13, color: "#767184", fontStyle: "italic" as const, marginBottom: 24, lineHeight: 1.5 },
+    probe: { fontSize: 13, color: "#787878", fontStyle: "italic" as const, marginBottom: 24, lineHeight: 1.5 },
     input: { width: "100%", padding: "14px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#F7F7F7", fontSize: 14, fontFamily: "inherit", outline: "none" },
     textarea: { width: "100%", padding: "14px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#F7F7F7", fontSize: 14, fontFamily: "inherit", outline: "none", lineHeight: 1.6, resize: "vertical" as const },
     btnPrimary: { flex: 1, padding: "13px 24px", borderRadius: 10, border: "none", background: "#6A3DB8", color: "#fff", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" },
-    btnSecondary: { padding: "13px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "transparent", color: "#767184", fontSize: 14, fontFamily: "inherit", cursor: "pointer" },
-    optionBtn: { padding: "14px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#ECEAF2", fontSize: 14, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
-    familyBtn: { padding: "12px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#ECEAF2", fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
+    btnSecondary: { padding: "13px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "transparent", color: "#787878", fontSize: 14, fontFamily: "inherit", cursor: "pointer" },
+    optionBtn: { padding: "14px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#CACACA", fontSize: 14, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
+    familyBtn: { padding: "12px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#CACACA", fontSize: 13, fontWeight: 500, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
   };
 
   if (phase === "family") {
@@ -194,7 +193,7 @@ export default function IntakePage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
             {TRACK_ORDER.map(t => (
               <div key={t}>
-                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#767184", marginBottom: 10 }}>{TRACK_LABELS[t]}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#787878", marginBottom: 10 }}>{TRACK_LABELS[t]}</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
                   {[...TRACK_MAP[t]].sort().map(fam => (
                     <button key={fam} onClick={() => selectFamily(fam)} style={styles.familyBtn}
@@ -218,7 +217,7 @@ export default function IntakePage() {
         <div style={{ width: 32, height: 32, border: "2px solid #3A3A3A", borderTopColor: "#6A3DB8", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>Analyzing with Claude...</div>
-          <div style={{ fontSize: 14, color: "#767184" }}>Setting up your search. Just a moment.</div>
+          <div style={{ fontSize: 14, color: "#787878" }}>Setting up your search. Just a moment.</div>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -236,7 +235,7 @@ export default function IntakePage() {
           <span style={{ fontSize: 12, color: "#555" }}>{idx + 1} / {questions.length}</span>
         </div>
         <div style={{ marginBottom: 32 }}>
-          <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(106,61,184,0.1)", border: "1px solid rgba(106,61,184,0.3)", color: "#B28CF4" }}>{jobFamily}</span>
+          <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(106,61,184,0.1)", border: "1px solid rgba(106,61,184,0.3)", color: "#8B5DD4" }}>{jobFamily}</span>
         </div>
         <div key={idx}>
           <h2 style={styles.heading}>{q.label}</h2>
