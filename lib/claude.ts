@@ -322,7 +322,7 @@ CRITICAL: Never include ic_concern content in the slack_summary. The ic_concern 
   "tap_private_brief": "<4-6 sentences. TAP eyes only. Completely candid. Include anything that could derail this search.>",
   "notion_summary": "<Clean structured summary for Notion audit trail. Include level spread, tensions, next steps.>",
   "jd_draft": {
-    "job_title": "<title>",
+    "job_title": "${hmAnswers.role_title ?? "Role Title"}",
     "level_label": "<e.g. L5 — Senior Talent Partner>",
     "about_the_role": "<2-3 paragraphs. Written for an external candidate. Compelling, specific, rooted in the actual scope described by HM and stakeholders.>",
     "what_you_will_do": ["<6-8 specific responsibilities. Not generic. Pulled directly from HM and stakeholder answers.>"],
