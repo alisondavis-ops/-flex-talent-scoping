@@ -168,3 +168,15 @@ export async function allInvitesSubmitted(sessionId: string): Promise<boolean> {
   if (!session || session.invites.length === 0) return false;
   return session.invites.every(inv => inv.status === "submitted");
 }
+export async function deleteSession(id: string): Promise<boolean> {
+  const exists = await getSession(id);
+  if (!exists) return false;
+  await redis.del(key(id));
+  return true;
+}
+export async function deleteSession(id: string): Promise<boolean> {
+  const exists = await getSession(id);
+  if (!exists) return false;
+  await redis.del(key(id));
+  return true;
+}
