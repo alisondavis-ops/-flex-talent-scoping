@@ -174,9 +174,3 @@ export async function deleteSession(id: string): Promise<boolean> {
   await redis.del(key(id));
   return true;
 }
-export async function deleteSession(id: string): Promise<boolean> {
-  const exists = await getSession(id);
-  if (!exists) return false;
-  await redis.del(key(id));
-  return true;
-}
