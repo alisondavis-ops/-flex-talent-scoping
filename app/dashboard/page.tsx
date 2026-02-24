@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import type { IntakeSession } from "@/types";
 
 const styles = {
-  page: { minHeight: "100vh", background: "#0D0B14", color: "#ECEAF2", fontFamily: "'DM Sans', system-ui, sans-serif" },
+  page: { minHeight: "100vh", background: "#1D1D1D", color: "#F7F7F7", fontFamily: "'DM Sans', system-ui, sans-serif" },
   container: { maxWidth: 900, margin: "0 auto", padding: "40px 24px" },
-  label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#B28CF4" },
+  label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#8B5DD4" },
   heading: { fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 32, color: "#F7F7F7", lineHeight: 1.25 },
-  card: { background: "#16131F", border: "1px solid #2A2440", borderRadius: 12, padding: 20, marginBottom: 12, cursor: "pointer", transition: "all 150ms ease", textDecoration: "none", display: "block", color: "inherit" },
+  card: { background: "#242424", border: "1px solid #3A3A3A", borderRadius: 12, padding: 20, marginBottom: 12, cursor: "pointer", transition: "all 150ms ease", textDecoration: "none", display: "block", color: "inherit" },
   btnPrimary: { padding: "12px 24px", borderRadius: 10, border: "none", background: "#6A3DB8", color: "#fff", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer", textDecoration: "none", display: "inline-block" },
 };
 
@@ -42,7 +42,7 @@ export default function DashboardPage() {
         </div>
 
         {loading ? (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#767184" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#787878" }}>
             <div style={{ width: 20, height: 20, border: "2px solid #3A3A3A", borderTopColor: "#6A3DB8", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
             Loading sessions...
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -51,27 +51,27 @@ export default function DashboardPage() {
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>📋</div>
             <h2 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 22, marginBottom: 12 }}>No searches yet</h2>
-            <p style={{ fontSize: 14, color: "#767184", marginBottom: 24 }}>Start a new intake to run your first AI-powered role analysis.</p>
+            <p style={{ fontSize: 14, color: "#787878", marginBottom: 24 }}>Start a new intake to run your first AI-powered role analysis.</p>
             <a href="/intake" style={styles.btnPrimary}>Start first intake →</a>
           </div>
         ) : (
           <div>
-            <div style={{ fontSize: 13, color: "#767184", marginBottom: 20 }}>{sessions.length} active search{sessions.length !== 1 ? "es" : ""}</div>
+            <div style={{ fontSize: 13, color: "#787878", marginBottom: 20 }}>{sessions.length} active search{sessions.length !== 1 ? "es" : ""}</div>
             {sessions.map(session => (
               <a key={session.id} href={`/results/${session.id}`} style={styles.card}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#6A3DB8"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#3A3A3A"; }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <div>
-                    <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>{session.job_family}</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>{session.hm_answers?.role_title ?? session.job_family}</div>
                     <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" as const }}>
-                      <span style={{ fontSize: 12, color: "#767184" }}>{session.track.toUpperCase()}</span>
-                      <span style={{ fontSize: 12, color: "#767184" }}>·</span>
-                      <span style={{ fontSize: 12, color: "#767184" }}>Session {session.id.slice(0, 8)}</span>
+                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{session.hm_answers?.tap_name ?? "TAP"}</span>
+                      <span style={{ fontSize: 12, color: "#787878" }}>·</span>
+                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{session.hm_answers?.hiring_id ? `ID ${session.hm_answers.hiring_id}` : session.job_family}</span>
                       {session.ai_analysis && (
                         <>
-                          <span style={{ fontSize: 12, color: "#767184" }}>·</span>
-                          <span style={{ fontSize: 12, color: "#767184" }}>
+                          <span style={{ fontSize: 12, color: "#787878" }}>·</span>
+                          <span style={{ fontSize: 12, color: "#787878" }}>
                             HM: L{session.ai_analysis.level_analysis.hm_requested_level} · AI: L{session.ai_analysis.level_analysis.recommended_level}
                             {!session.ai_analysis.level_analysis.level_match && " ⚠"}
                           </span>
@@ -81,7 +81,7 @@ export default function DashboardPage() {
                   </div>
                   <div style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-end", gap: 8 }}>
                     <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 99, background: `${PHASE_COLORS[session.phase]}22`, color: PHASE_COLORS[session.phase], border: `1px solid ${PHASE_COLORS[session.phase]}44` }}>
-                      {session.phase === "intake_complete" ? "Awaiting Invites" : session.phase === "stakeholders_invited" ? "Awaiting Responses" : session.phase === "synthesis_complete" ? "Analysis Ready" : session.phase.replace(/_/g, " ")}
+                      {session.phase.replace(/_/g, " ")}
                     </span>
                     <span style={{ fontSize: 11, color: "#555" }}>
                       {new Date(session.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
@@ -90,7 +90,7 @@ export default function DashboardPage() {
                 </div>
                 {session.invites.length > 0 && (
                   <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #3A3A3A", display: "flex", gap: 16 }}>
-                    <span style={{ fontSize: 12, color: "#767184" }}>
+                    <span style={{ fontSize: 12, color: "#787878" }}>
                       {session.invites.filter(i => i.status === "submitted").length}/{session.invites.length} stakeholders responded
                     </span>
                     {session.synthesis && (

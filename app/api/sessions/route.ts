@@ -62,6 +62,6 @@ export async function POST(request: Request) {
 
 export async function GET() {
   const { getAllSessions } = await import("@/lib/sessions");
-  const sessions = getAllSessions();
+  const sessions = await getAllSessions();
   return NextResponse.json({ success: true, data: sessions });
 }
