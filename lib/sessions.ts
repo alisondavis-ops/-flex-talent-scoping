@@ -86,7 +86,7 @@ export function createInvite(params: {
   expiresAt.setDate(expiresAt.getDate() + TOKEN_EXPIRY_DAYS);
 
   const token = jwt.sign(
-    { invite_id: inviteId, session_id: params.sessionId, role_type: params.roleType },
+    { invite_id: inviteId, session_id: params.sessionId, roleType: params.roleType },
     JWT_SECRET,
     { expiresIn: `${TOKEN_EXPIRY_DAYS}d` }
   );
@@ -127,7 +127,7 @@ export function validateToken(token: string): {
     return {
       inviteId: decoded.invite_id,
       sessionId: decoded.session_id,
-      roleType: decoded.role_type,
+     roleType: decoded.roleType,
     };
   } catch {
     return null;

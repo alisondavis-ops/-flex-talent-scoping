@@ -274,11 +274,11 @@ You are synthesizing stakeholder input for a talent search at Flex.
 
 HM LEVEL REQUEST: ${hmAnswers.hm_level_pick}
 HM LEVEL RATIONALE: ${hmAnswers.hm_level_rationale ?? "Not provided"}
-AI LEVEL RECOMMENDATION: L${existingAnalysis.level_analysis.recommended_level}
-LEVEL MATCH: ${existingAnalysis.level_analysis.level_match ? "Yes" : "No — tension exists"}
+AI LEVEL RECOMMENDATION: ${existingAnalysis?.level_analysis ? `L${existingAnalysis.level_analysis.recommended_level}` : "To be determined — no prior analysis"}
+LEVEL MATCH: ${existingAnalysis?.level_analysis ? (existingAnalysis.level_analysis.level_match ? "Yes" : "No — tension exists") : "Unknown"}
 
 EXISTING TENSIONS FROM HM INTAKE:
-${existingAnalysis.tensions.map(t => `- [${t.severity.toUpperCase()}] ${t.title}: ${t.description}`).join("\n")}
+${existingAnalysis?.tensions?.length ? existingAnalysis.tensions.map(t => `- [${t.severity.toUpperCase()}] ${t.title}: ${t.description}`).join("\n") : "None yet — this is the first analysis pass."}
 
 STAKEHOLDER RESPONSES:
 ${responses.map((r, i) => `
@@ -298,8 +298,8 @@ CRITICAL: Never include ic_concern content in the slack_summary. The ic_concern 
 {
   "level_spread": [
     {
-      "respondent": "<role type label — e.g. HM's Lead, Future Peer>",
-      "role_type": "<hm_peer|hm_lead|future_peer|ic_team|backfill_colleague>",
+      "respondent": "<name or role label>",
+      "role_type": "<hiring_manager|cross_functional_partner|key_stakeholder|department_lead|dri>",
       "level_pick": <number>,
       "rationale_summary": "<1 sentence capturing their reasoning>"
     }
@@ -312,20 +312,60 @@ CRITICAL: Never include ic_concern content in the slack_summary. The ic_concern 
       "title": "<tension title>",
       "description": "<2-3 sentences. Be specific about who diverges and how. Name it directly.>",
       "severity": "high|medium|low",
-      "probing_question": "<Exact question the TAP should ask to resolve this — make it direct>",
+      "probing_question": "<Exact question the TAP should ask to resolve this>",
       "source": "stakeholder_synthesis",
-      "respondents_involved": ["<role types involved in this tension>"]
+      "respondents_involved": ["<role types involved>"]
     }
   ],
-  "probing_questions": ["<Up to 6 questions for the TAP's alignment call. These should be the hardest, most important questions — the ones a senior TAP would know to ask.>"],
-  "slack_summary": "<3-4 sentences. Professional, constructive, safe for the channel. Surface key themes and next steps. NO ic_concern content.>",
-  "tap_private_brief": "<4-6 sentences for TAP eyes only. Be completely candid. Include ic_concern signals, level tensions, anything that could derail this search. What does the TAP need to know before walking into the alignment call?>",
-  "notion_summary": "<A clean, structured summary for the Notion audit trail. Include level spread, key tensions, and recommended next steps.>"
+  "probing_questions": ["<Up to 6 questions — the hardest, most important ones a senior TAP would ask>"],
+  "slack_summary": "<3-4 sentences. Professional, constructive, safe for the channel. NO ic_concern content.>",
+  "tap_private_brief": "<4-6 sentences. TAP eyes only. Completely candid. Include anything that could derail this search.>",
+  "notion_summary": "<Clean structured summary for Notion audit trail. Include level spread, tensions, next steps.>",
+  "jd_draft": {
+    "job_title": "<title>",
+    "level_label": "<e.g. L5 — Senior Talent Partner>",
+    "about_the_role": "<2-3 paragraphs. Written for an external candidate. Compelling, specific, rooted in the actual scope described by HM and stakeholders.>",
+    "what_you_will_do": ["<6-8 specific responsibilities. Not generic. Pulled directly from HM and stakeholder answers.>"],
+    "what_we_are_looking_for": ["<6-8 requirements. Mix of Flex attributes and role-specific skills. Do NOT include parenthetical citations like '(Owner attribute)' or '(L5 signal)' — weave the language in naturally instead.>"],
+    "nice_to_have": ["<3-4 items>"],
+    "location_statement": "<location from HM answers>"
+  },
+  "interview_plan": {
+    "stages": [
+      {
+        "stage_name": "<e.g. Intro Call, HM Interview, Case Study>",
+        "stage_type": "<intro_call|technical|case|values|executive|offer>",
+        "duration_minutes": <number>,
+        "interviewer_type": "<who runs this stage>",
+        "focus_areas": ["<2-4 focus areas>"],
+        "sample_questions": ["<2-3 specific questions for this stage>"],
+        "attributes_assessed": ["<Flex attributes — Doer, Owner, Collaborative, Precise, Resilient, Humble>"]
+      }
+    ],
+    "overall_notes": "<Key considerations for this search's interview process based on tensions and role complexity.>",
+    "attribute_mapping": {
+      "<attribute>": ["<which stages assess it>"]
+    }
+  },
+  "sourcing_strategy": {
+    "headline": "<1 sentence sourcing thesis — what kind of person are we really looking for and where do they live?>",
+    "target_companies": ["<8-12 specific companies>"],
+    "target_titles": ["<6-8 titles to search>"],
+    "search_strings": ["<3-4 LinkedIn boolean search strings>"],
+    "channels": [
+      {
+        "channel": "<channel name>",
+        "rationale": "<why this channel for this role>",
+        "priority": "primary|secondary"
+      }
+    ],
+    "outreach_angle": "<What makes this role worth leaving a stable job for? Write the hook a sourcer should lead with.>"
+  }
 }`;
 
   const response = await anthropic.messages.create({
     model: "claude-opus-4-6",
-    max_tokens: 4000,
+    max_tokens: 8000,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: prompt }],
   });
@@ -337,7 +377,15 @@ CRITICAL: Never include ic_concern content in the slack_summary. The ic_concern 
     return JSON.parse(content.text) as SynthesisResult;
   } catch {
     const match = content.text.match(/\{[\s\S]*\}/);
-    if (match) return JSON.parse(match[0]) as SynthesisResult;
+    if (match) {
+      try {
+        return JSON.parse(match[0]) as SynthesisResult;
+      } catch (e) {
+        console.error("JSON parse failed. Raw response:", content.text.slice(0, 500));
+        throw new Error("Could not parse synthesis response as JSON");
+      }
+    }
+    console.error("No JSON found in response. Raw:", content.text.slice(0, 500));
     throw new Error("Could not parse synthesis response as JSON");
   }
 }

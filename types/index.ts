@@ -157,6 +157,9 @@ export interface SynthesisResult {
   slack_summary: string;
   tap_private_brief: string;
   notion_summary: string;
+  jd_draft?: JDDraft;
+  interview_plan?: InterviewPlan;
+  sourcing_strategy?: SourcingStrategy;
 }
 
 export interface IntakeSession {

@@ -1,0 +1,14 @@
+
+> flex-talent-scoping@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.153:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 1057ms
+ GET /results/fed24cb2-b2be-4ffc-9797-7983d0b69576 200 in 1112ms (compile: 1034ms, render: 78ms)
+ GET /api/sessions/fed24cb2-b2be-4ffc-9797-7983d0b69576 200 in 994ms (compile: 982ms, render: 12ms)
+ GET /api/sessions/fed24cb2-b2be-4ffc-9797-7983d0b69576 200 in 58ms (compile: 39ms, render: 19ms)

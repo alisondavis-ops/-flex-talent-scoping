@@ -134,7 +134,8 @@ export async function GET(
     return NextResponse.json({ success: false, error: "already_submitted" }, { status: 409 });
   }
 
-  const questions = getQuestionsForRole(decoded.roleType, session.track);
+  console.log("DEBUG roleType:", decoded.roleType, "track:", session.track);
+const questions = getQuestionsForRole(decoded.roleType, session.track);
 
   return NextResponse.json({
     success: true,
