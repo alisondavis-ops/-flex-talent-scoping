@@ -14,12 +14,12 @@ export async function POST(
     const body = (await request.json()) as AddInviteRequest;
     const { name, slack_user_id, role_type } = body;
 
-    const session = getSession(sessionId);
+    const session = await getSession(sessionId);
     if (!session) {
       return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
     }
 
-    const invite = createInvite({
+    const invite = await createInvite({
       sessionId,
       name,
       slackUserId: slack_user_id,
@@ -38,7 +38,7 @@ export async function POST(
           jobFamily: session.job_family,
           formLink,
         });
-        markInviteSent(sessionId, invite.id);
+        await markInviteSent(sessionId, invite.id);
       } catch (err) {
         console.error("Slack DM failed:", err);
       }

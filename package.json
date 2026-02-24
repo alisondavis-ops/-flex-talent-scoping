@@ -10,6 +10,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
     "@notionhq/client": "^5.9.0",
+    "@upstash/redis": "^1.36.2",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.6",
     "react": "19.2.3",

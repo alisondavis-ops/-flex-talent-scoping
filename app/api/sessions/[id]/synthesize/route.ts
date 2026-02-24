@@ -10,7 +10,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const session = getSession(id);
+    const session = await getSession(id);
     if (!session) {
       return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
     }
@@ -39,7 +39,7 @@ export async function POST(
       session.ai_analysis
     );
 
-    updateSession(id, {
+    await updateSession(id, {
       synthesis,
       phase: "synthesis_complete",
     });
@@ -61,7 +61,7 @@ export async function POST(
       slackChannelId = channel.channelId;
       slackChannelName = channel.channelName;
 
-      updateSession(id, {
+      await updateSession(id, {
         slack_channel_id: slackChannelId,
         slack_channel_name: slackChannelName,
       });

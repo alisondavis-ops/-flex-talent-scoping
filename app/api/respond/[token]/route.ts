@@ -120,7 +120,7 @@ export async function GET(
     return NextResponse.json({ success: false, error: "Invalid or expired link" }, { status: 401 });
   }
 
-  const session = getSession(decoded.sessionId);
+  const session = await getSession(decoded.sessionId);
   if (!session) {
     return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
   }
@@ -163,7 +163,7 @@ export async function POST(
       return NextResponse.json({ success: false, error: "Invalid or expired link" }, { status: 401 });
     }
 
-    const session = getSession(decoded.sessionId);
+    const session = await getSession(decoded.sessionId);
     if (!session) {
       return NextResponse.json({ success: false, error: "Session not found" }, { status: 404 });
     }
@@ -174,7 +174,7 @@ export async function POST(
     }
 
     const body = (await request.json()) as SubmitResponseRequest;
-    const response = submitResponse(
+    const response = await submitResponse(
       decoded.sessionId,
       decoded.inviteId,
       body.answers,
@@ -182,7 +182,7 @@ export async function POST(
     );
 
     if (session.tap_slack_id) {
-      const updatedSession = getSession(decoded.sessionId)!;
+      const updatedSession = await getSession(decoded.sessionId);
       const submitted = updatedSession.invites.filter(inv => inv.status === "submitted").length;
       const total = updatedSession.invites.length;
 
@@ -197,7 +197,7 @@ export async function POST(
       }).catch(console.error);
     }
 
-    const allDone = allInvitesSubmitted(decoded.sessionId);
+    const allDone = await allInvitesSubmitted(decoded.sessionId);
 
     return NextResponse.json({
       success: true,

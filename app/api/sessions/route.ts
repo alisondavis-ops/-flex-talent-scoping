@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     const track = detectTrack(job_family) as CreateSessionRequest["track"];
 
-    const session = createSession({
+    const session = await createSession({
       hm_answers,
       job_family,
       track,
