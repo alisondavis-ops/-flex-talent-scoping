@@ -65,9 +65,9 @@ export default function DashboardPage() {
                   <div>
                     <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>{session.hm_answers?.role_title ?? session.job_family}</div>
                     <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" as const }}>
-                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{session.hm_answers?.tap_name ?? "TAP"}</span>
+                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{`TAP: ${session.hm_answers?.tap_name ?? "Unknown"}`}</span>
                       <span style={{ fontSize: 12, color: "#787878" }}>·</span>
-                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{session.hm_answers?.hiring_id ? `ID ${session.hm_answers.hiring_id}` : session.job_family}</span>
+                      <span style={{ fontSize: 12, color: "#9A95B0" }}>{session.hm_answers?.hiring_id ? `Hiring ID: ${session.hm_answers.hiring_id}` : session.job_family}</span>
                       {session.ai_analysis && (
                         <>
                           <span style={{ fontSize: 12, color: "#787878" }}>·</span>
