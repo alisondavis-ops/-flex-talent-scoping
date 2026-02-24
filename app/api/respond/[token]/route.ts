@@ -58,9 +58,56 @@ const HM_QUESTIONS = [
   { id: "hm_level_rationale", label: "Walk us through your reasoning. Why that level?", probe: "What about scope, impact, or skills needed led you there?", type: "textarea" },
 ];
 
-function getQuestionsForRole(roleType: string) {
-  if (roleType === "hiring_manager") return HM_QUESTIONS;
+function getQuestionsForRole(roleType: string, track?: string) {
+  if (roleType === "hiring_manager") return getHMQuestions(track ?? "ga");
   return [RELATIONSHIP_QUESTION, ...CORE_QUESTIONS];
+}
+
+function getHMQuestions(track: string) {
+  const orgQuestion = track === "product"
+    ? { id: "org_area", label: "Which part of the product org is this role part of?", probe: "e.g. Consumer, Platform, Partner — where does this team sit?", type: "text" }
+    : { id: "org_area", label: "Which part of the org does this role support?", probe: "e.g. Engineering, GTM, People — who are the primary internal stakeholders?", type: "text" };
+
+  const trackSpecific: Record<string, object[]> = {
+    product: [
+      { id: "zero_to_one", label: "Is this a 0-to-1 build?", probe: "Building something net new, or evolving/scaling something that exists?", type: "select", options: ["Yes — fully net new", "Mostly new, some foundation exists", "Scaling/evolving an existing product", "Primarily maintenance and optimization"] },
+      { id: "vision_vs_execution", label: "Do we know the solution — or do we need someone to define both vision AND execution?", probe: "This is one of the biggest leveling signals.", type: "select", options: ["We know the solution — need strong execution", "Rough direction exists — need someone to sharpen and build", "We have the problem — need someone to define solution and strategy", "We don't fully know the problem or solution — need someone to define both"] },
+      { id: "specialization", label: "How niche or specialized is this role?", type: "select", options: ["Agile product athlete can ramp — domain is learnable", "Some domain familiarity helpful but not required", "Prior domain experience strongly preferred", "Prior experience with this exact problem set is critical"] },
+    ],
+    engineering: [
+      { id: "greenfield", label: "Is this a greenfield build or maintaining/extending existing systems?", type: "select", options: ["Greenfield — net new system or platform", "Mostly new with some existing foundation", "Extending / evolving existing systems", "Primarily maintaining and optimizing existing systems"] },
+      { id: "tech_scope", label: "How would you describe the technical scope of this role?", type: "select", options: ["Deep specialist — expert in a narrow domain", "Full-stack contributor — breadth across the system", "Systems architect — designs across platforms", "Technical leader — sets direction, enables others"] },
+      { id: "cross_functional_scope", label: "How cross-functional is this role?", type: "select", options: ["Primarily within the engineering team", "Works closely with 1–2 adjacent teams", "Significant cross-functional coordination required", "Enterprise-wide — interfaces across the entire org"] },
+    ],
+    marketing: [
+      { id: "marketing_motion", label: "Is this role primarily building the marketing function/strategy, or executing within an established one?", type: "select", options: ["Building — strategy and function largely undefined", "Inheriting a strategy, needs significant refinement", "Executing within a defined strategy and playbook", "Optimizing an established motion — improve and scale"] },
+      { id: "channel_scope", label: "What is the primary scope of this role's channel or domain ownership?", type: "select", options: ["Single channel or campaign type", "Multiple channels within a function", "Full function ownership", "Cross-functional — spans brand, growth, and product marketing"] },
+    ],
+    revenue: [
+      { id: "market_maturity", label: "Is this role focused on a new market/segment or an existing book of business?", type: "select", options: ["New market — no existing motion or pipeline", "Emerging — early signal, limited infrastructure", "Established — existing pipeline, room to grow", "Mature book — optimize and retain"] },
+      { id: "gtm_definition", label: "How defined is the go-to-market motion this person will operate in?", type: "select", options: ["Fully defined playbook — execute within it", "Playbook exists but needs refinement", "Rough direction — significant building required", "Blank slate — define the motion from scratch"] },
+    ],
+    ga: [
+      { id: "process_maturity", label: "How mature is the process or function this person is stepping into?", type: "select", options: ["Undefined — no process exists yet", "Nascent — early attempts, inconsistent", "Established but broken — needs a rebuild", "Functional — works, but has clear optimization opportunities", "Mature — well-documented, scalable, needs stewardship"] },
+      { id: "primary_mode", label: "What is the primary mode of this role?", type: "select", options: ["Defining — build the function or process from scratch", "Optimizing — inherit something and make it significantly better", "Executing — operate within established systems and processes", "Mixed — some definition, mostly optimization and execution"] },
+      { id: "cross_functional_scope", label: "How cross-functional is this role?", type: "select", options: ["Primarily team-internal", "Works closely with 1–2 adjacent teams", "Significant cross-functional coordination required", "Enterprise-wide — interfaces across the entire org"] },
+    ],
+  };
+
+  const coreHMQuestions = [
+    { id: "people_management", label: "Does this person need to manage people?", probe: "If yes — how many reports, how senior, and how much management experience is truly needed?", type: "text" },
+    { id: "ic_vs_manager", label: "Is this role hands-on IC, purely managerial, or a player/coach?", type: "select", options: ["Primarily IC — mostly in the weeds", "Player/coach — significant IC + managing others", "Primarily managerial — IC in critical spots only", "Full people leader — IC is rare"] },
+    { id: "success", label: "What does success look like at 6 and 12 months?", probe: "Be specific. What will this person have shipped, influenced, or changed?", type: "textarea" },
+    { id: "failure", label: "What does failure look like?", probe: "What would cause this hire not to work out? This often reveals the real requirements.", type: "textarea" },
+    { id: "backfill", label: "Is this a backfill or a new role?", probe: "If backfill — what did you learn? If new — who owned this scope before?", type: "text" },
+    { id: "domain_experience", label: "How much domain or industry experience is needed?", type: "select", options: ["Not required — strong fundamentals are enough", "Helpful but not a dealbreaker", "Strongly preferred", "Required — complexity demands it"] },
+    { id: "competitors", label: "Any specific companies, backgrounds, or profiles we should target?", type: "text" },
+    { id: "location", label: "Where can this role be based?", type: "select", options: ["New York, NY — Tier 1 (HQ)", "San Francisco / Bay Area — Tier 1", "Salt Lake City, UT — Tier 3", "Remote — Engineering / Data Science / AI/ML / L4+ Field Sales", "Remote — Exception requested (L7+ only)", "Multiple locations"] },
+    { id: "hm_level_pick", label: "What level do you believe this role should be?", probe: "Pick the level you feel most convicted about.", type: "select", options: ["L3", "L4", "L5", "L6", "L7", "L8", "L9"] },
+    { id: "hm_level_rationale", label: "Walk us through your reasoning. Why that level?", probe: "What about scope, impact, or skills needed led you there?", type: "textarea" },
+  ];
+
+  return [orgQuestion, ...(trackSpecific[track] ?? trackSpecific.ga), ...coreHMQuestions];
 }
 
 export async function GET(
@@ -87,7 +134,7 @@ export async function GET(
     return NextResponse.json({ success: false, error: "already_submitted" }, { status: 409 });
   }
 
-  const questions = getQuestionsForRole(decoded.roleType);
+  const questions = getQuestionsForRole(decoded.roleType, session.track);
 
   return NextResponse.json({
     success: true,
