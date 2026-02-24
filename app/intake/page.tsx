@@ -256,14 +256,14 @@ export default function IntakePage() {
               <textarea value={val} onChange={e => setVal(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && val.trim()) advance(val); }}
                 placeholder="Type your answer..." rows={4} style={styles.textarea} />
-              <div style={{ fontSize: 11, color: "#555", marginTop: 6 }}>⌘↵ to continue</div>
+              <div style={{ fontSize: 11, color: "#9A95B0", marginTop: 6 }}>⌘↵ to continue</div>
             </div>
           ) : (
             <div style={{ marginBottom: 24 }}>
               <input type="text" value={val} onChange={e => setVal(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter" && val.trim()) advance(val); }}
                 placeholder="Type your answer..." style={styles.input} />
-              <div style={{ fontSize: 11, color: "#555", marginTop: 6 }}>↵ to continue</div>
+              <div style={{ fontSize: 11, color: "#9A95B0", marginTop: 6 }}>↵ to continue</div>
             </div>
           )}
 

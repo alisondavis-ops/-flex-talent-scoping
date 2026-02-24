@@ -25,16 +25,16 @@ interface StakeholderFormData {
 
 
 const styles = {
-  page: { minHeight: "100vh", background: "#0D0B14", color: "#ECEAF2", fontFamily: "'DM Sans', system-ui, sans-serif" },
+  page: { minHeight: "100vh", background: "#1D1D1D", color: "#F7F7F7", fontFamily: "'DM Sans', system-ui, sans-serif" },
   container: { maxWidth: 600, margin: "0 auto", padding: "40px 24px" },
-  label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#B28CF4" },
+  label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#8B5DD4" },
   heading: { fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 28, color: "#F7F7F7", lineHeight: 1.25 },
-  probe: { fontSize: 13, color: "#767184", fontStyle: "italic" as const, marginBottom: 24, lineHeight: 1.5 },
+  probe: { fontSize: 13, color: "#787878", fontStyle: "italic" as const, marginBottom: 24, lineHeight: 1.5 },
   input: { width: "100%", padding: "14px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#F7F7F7", fontSize: 14, fontFamily: "inherit", outline: "none" },
   textarea: { width: "100%", padding: "14px 16px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#F7F7F7", fontSize: 14, fontFamily: "inherit", outline: "none", lineHeight: 1.6, resize: "vertical" as const },
-  optionBtn: { padding: "14px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#ECEAF2", fontSize: 14, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
+  optionBtn: { padding: "14px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "#242424", color: "#CACACA", fontSize: 14, fontFamily: "inherit", cursor: "pointer", textAlign: "left" as const, transition: "all 150ms ease" },
   btnPrimary: { flex: 1, padding: "13px 24px", borderRadius: 10, border: "none", background: "#6A3DB8", color: "#fff", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" },
-  btnSecondary: { padding: "13px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "transparent", color: "#767184", fontSize: 14, fontFamily: "inherit", cursor: "pointer" },
+  btnSecondary: { padding: "13px 18px", borderRadius: 10, border: "1px solid #3A3A3A", background: "transparent", color: "#787878", fontSize: 14, fontFamily: "inherit", cursor: "pointer" },
 };
 
 export default function RespondPage() {
@@ -143,7 +143,7 @@ export default function RespondPage() {
       <div style={{ textAlign: "center", maxWidth: 400 }}>
         <div style={{ fontSize: 32, marginBottom: 16 }}>✓</div>
         <h2 style={{ ...styles.heading, fontSize: 22, marginBottom: 12 }}>Already submitted</h2>
-        <p style={{ fontSize: 14, color: "#767184" }}>Your response has been recorded. Thank you for your input.</p>
+        <p style={{ fontSize: 14, color: "#787878" }}>Your response has been recorded. Thank you for your input.</p>
       </div>
     </div>
   );
@@ -153,7 +153,7 @@ export default function RespondPage() {
       <div style={{ textAlign: "center", maxWidth: 400 }}>
         <div style={{ fontSize: 32, marginBottom: 16 }}>⚠</div>
         <h2 style={{ ...styles.heading, fontSize: 22, marginBottom: 12 }}>Link unavailable</h2>
-        <p style={{ fontSize: 14, color: "#767184" }}>{error}</p>
+        <p style={{ fontSize: 14, color: "#787878" }}>{error}</p>
       </div>
     </div>
   );
@@ -163,7 +163,7 @@ export default function RespondPage() {
       <div style={{ textAlign: "center", maxWidth: 400 }}>
         <div style={{ fontSize: 48, marginBottom: 20 }}>✓</div>
         <h2 style={{ ...styles.heading, fontSize: 26, marginBottom: 12 }}>Response submitted</h2>
-        <p style={{ fontSize: 14, color: "#767184", lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: "#787878", lineHeight: 1.6 }}>
           Your perspective on the <strong style={{ color: "#F7F7F7" }}>{formData?.job_family}</strong> role has been recorded.
           The Talent team will review all responses and follow up with next steps.
         </p>
@@ -174,7 +174,7 @@ export default function RespondPage() {
   if (submitting) return (
     <div style={{ ...styles.page, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16 }}>
       <div style={{ width: 28, height: 28, border: "2px solid #3A3A3A", borderTopColor: "#6A3DB8", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-      <div style={{ fontSize: 14, color: "#767184" }}>Submitting your response...</div>
+      <div style={{ fontSize: 14, color: "#787878" }}>Submitting your response...</div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
@@ -195,14 +195,14 @@ export default function RespondPage() {
           <span style={{ fontSize: 12, color: "#555" }}>{idx + 1} / {formData.questions.length}</span>
         </div>
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 13, color: "#ECEAF2", marginBottom: 12, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: "#CACACA", marginBottom: 12, lineHeight: 1.6 }}>
             Hi <strong style={{ color: "#F7F7F7" }}>{formData.stakeholder_name}</strong> — you've been asked to share your perspective on a role we're scoping.
           </div>
-          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#16131F", border: "1px solid #2A2440", marginBottom: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#767184", marginBottom: 6 }}>Role</div>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#242424", border: "1px solid #3A3A3A", marginBottom: 8 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#787878", marginBottom: 6 }}>Role</div>
             <div style={{ fontSize: 15, fontWeight: 600, color: "#F7F7F7" }}>{formData.role_title ?? formData.job_family}</div>
             {formData.requester_name && (
-              <div style={{ fontSize: 13, color: "#767184", marginTop: 4 }}>{formData.requester_name} is requesting your input</div>
+              <div style={{ fontSize: 13, color: "#787878", marginTop: 4 }}>{formData.requester_name} is requesting your input</div>
             )}
           </div>
           <div style={{ fontSize: 12, color: "#555", lineHeight: 1.5 }}>
@@ -229,7 +229,7 @@ export default function RespondPage() {
               <textarea value={val} onChange={e => setVal(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && val.trim()) advance(val); }}
                 placeholder="Type your answer..." rows={4} style={styles.textarea} />
-              <div style={{ fontSize: 11, color: "#555", marginTop: 6 }}>⌘↵ to continue</div>
+              <div style={{ fontSize: 11, color: "#9A95B0", marginTop: 6 }}>⌘↵ to continue</div>
             </div>
           )}
 
